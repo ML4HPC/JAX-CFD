@@ -1,0 +1,925 @@
+baseline_64
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes: (12/17)
+    domain_size:                   [0.         6.28318531]
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+domain_size: [0.         6.28318531]
+domain_size_multiple: 1
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+init_cfl_safety_factor: 0.5
+init_peak_wavenumber: 4.0
+maximum_velocity: 7.0
+ndim: 2
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+save_grid_size: 64
+seed: 2
+simulation_grid_size: 64
+simulation_time: 240.0
+stable_time_step: 0.007012483601762931
+time_subsample_factor: 1
+tracing_max_duration_in_msec: 100.0
+warmup_grid_size: 2048
+warmup_time: 40.0
+
+
+
+
+
+baseline_128
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes: (12/16)
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ndim:                          2
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+domain_size_multiple: 1
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+init_cfl_safety_factor: 0.5
+init_peak_wavenumber: 4.0
+maximum_velocity: 7.0
+ndim: 2
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+save_grid_size: 64
+seed: 2
+simulation_grid_size: 128
+simulation_time: 240.0
+stable_time_step: 0.007012483601762931
+time_subsample_factor: 1
+tracing_max_duration_in_msec: 100.0
+warmup_grid_size: 2048
+warmup_time: 40.0
+
+
+
+
+
+baseline_256
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes: (12/16)
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ndim:                          2
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+domain_size_multiple: 1
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+init_cfl_safety_factor: 0.5
+init_peak_wavenumber: 4.0
+maximum_velocity: 7.0
+ndim: 2
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+save_grid_size: 64
+seed: 2
+simulation_grid_size: 256
+simulation_time: 240.0
+stable_time_step: 0.007012483601762931
+time_subsample_factor: 1
+tracing_max_duration_in_msec: 100.0
+warmup_grid_size: 2048
+warmup_time: 40.0
+
+
+
+
+
+baseline_512
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes: (12/16)
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ndim:                          2
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+domain_size_multiple: 1
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+init_cfl_safety_factor: 0.5
+init_peak_wavenumber: 4.0
+maximum_velocity: 7.0
+ndim: 2
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+save_grid_size: 64
+seed: 2
+simulation_grid_size: 512
+simulation_time: 240.0
+stable_time_step: 0.007012483601762931
+time_subsample_factor: 1
+tracing_max_duration_in_msec: 100.0
+warmup_grid_size: 2048
+warmup_time: 40.0
+
+
+
+
+
+baseline_1024
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes: (12/16)
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ndim:                          2
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+domain_size_multiple: 1
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+init_cfl_safety_factor: 0.5
+init_peak_wavenumber: 4.0
+maximum_velocity: 7.0
+ndim: 2
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+save_grid_size: 64
+seed: 2
+simulation_grid_size: 1024
+simulation_time: 240.0
+stable_time_step: 0.007012483601762931
+time_subsample_factor: 1
+tracing_max_duration_in_msec: 100.0
+warmup_grid_size: 2048
+warmup_time: 40.0
+
+
+
+
+
+baseline_2048
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes: (12/16)
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ndim:                          2
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+domain_size_multiple: 1
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+init_cfl_safety_factor: 0.5
+init_peak_wavenumber: 4.0
+maximum_velocity: 7.0
+ndim: 2
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+save_grid_size: 64
+seed: 2
+simulation_grid_size: 2048
+simulation_time: 240.0
+stable_time_step: 0.007012483601762931
+time_subsample_factor: 1
+tracing_max_duration_in_msec: 100.0
+warmup_grid_size: 2048
+warmup_time: 40.0
+
+
+
+
+
+learned_interp_64
+<xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(16, 381, 64, 64), meta=np.ndarray>
+Attributes:
+    grid_size:  64
+    ndim:       2
+grid_size: 64
+ndim: 2
+
+
+
+
+
+train
+<xarray.Dataset>
+Dimensions:  (time: 4880, x: 64, y: 64, sample: 32)
+Coordinates:
+  * time     (time) float64 0.0 0.007012 0.01402 0.02104 ... 34.2 34.21 34.21
+  * x        (x) float32 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float32 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 ... 23 24 25 26 27 28 29 30 31
+Data variables:
+    u        (sample, time, x, y) float32 dask.array<chunksize=(32, 122, 64, 64), meta=np.ndarray>
+    v        (sample, time, x, y) float32 dask.array<chunksize=(32, 122, 64, 64), meta=np.ndarray>
+Attributes: (12/16)
+    seed:                          0
+    tracing_max_duration_in_msec:  100.0
+    ndim:                          2
+    domain_size_multiple:          1
+    warmup_grid_size:              2048
+    simulation_grid_size:          2048
+    ...                            ...
+    maximum_velocity:              7.0
+    init_peak_wavenumber:          4.0
+    init_cfl_safety_factor:        0.5
+    physics_config_str:            \n# Macros:\n# ===========================...
+    full_config_str:               \n# Macros:\n# ===========================...
+    stable_time_step:              0.007012483601762931
+seed: 0
+tracing_max_duration_in_msec: 100.0
+ndim: 2
+domain_size_multiple: 1
+warmup_grid_size: 2048
+simulation_grid_size: 2048
+save_grid_size: 64
+warmup_time: 40.0
+simulation_time: 30.0
+time_subsample_factor: 1
+maximum_velocity: 7.0
+init_peak_wavenumber: 4.0
+init_cfl_safety_factor: 0.5
+physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+stable_time_step: 0.007012483601762931
+
+
+
+
+

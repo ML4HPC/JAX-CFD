@@ -1,0 +1,93 @@
+# Implicit diffusion direct numerical simulation (DNS) configuration file.
+#
+# Can be used as base configuration for other models.
+# For an example of LES model see `smagorinsky_config.gin`.
+
+# Imports of modules to get access to their configurables.
+import jax_cfd.ml.advections
+import jax_cfd.ml.decoders
+import jax_cfd.ml.diffusions
+import jax_cfd.ml.encoders
+import jax_cfd.ml.equations
+import jax_cfd.ml.forcings
+import jax_cfd.ml.interpolations
+import jax_cfd.ml.model_builder
+import jax_cfd.ml.model_utils
+import jax_cfd.ml.optimizer_modules
+import jax_cfd.ml.pressures
+import jax_cfd.ml.towers
+import jax_cfd.ml.viscosities
+
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+U_INTERPOLATION_MODULE = @interpolations.linear
+CONVECTION_MODULE = @advections.self_advection
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+INTERPOLATION_MODULE = @interpolations.FusedLearnedInterpolation
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+
+# Parameters for exponential_decay:
+# ==============================================================================
+# adam.step_size = @optimizers.exponential_decay()
+# exponential_decay.decay_rate = 0.1
+# exponential_decay.decay_steps = 300000.0
+# exponential_decay.step_size = 0.001
+
+# Parameters for fixed_scale:
+# ==============================================================================
+fixed_scale.rescaled_one = 0.2
+
+# Parameters for FusedLearnedInterpolation:
+# ==============================================================================
+FusedLearnedInterpolation.stencil_size = 4
+FusedLearnedInterpolation.tags = ('u', 'c')
+FusedLearnedInterpolation.tower_factory = @towers.forward_tower_factory
+
+# Parameters for forward_tower_factory:
+# ==============================================================================
+forward_tower_factory.inputs_scale_fn = @towers.fixed_scale
+forward_tower_factory.kernel_size = 3
+forward_tower_factory.num_hidden_channels = 64
+forward_tower_factory.num_hidden_layers = 6
+forward_tower_factory.output_kernel_size = 3
+
+# Parameters for get_model:
+# ==============================================================================
+model_builder.get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for Model:
+# ==============================================================================
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+ModularStepModel.advance_module = %NS_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_self_advection
+
+# Parameters for modular_self_advection:
+# ==============================================================================
+modular_self_advection.interpolation_module = %INTERPOLATION_MODULE
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE

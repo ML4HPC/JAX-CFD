@@ -1,0 +1,535 @@
+I1216 14:22:18.136075 139628846601088 xla_bridge.py:243] Unable to initialize backend 'tpu_driver': NOT_FOUND: Unable to find driver in registry given worker: 
+I1216 14:22:18.568184 139628846601088 xla_bridge.py:243] Unable to initialize backend 'tpu': INVALID_ARGUMENT: TpuPlatform is not available.
+I1216 14:22:18.590607 139628846601088 dataset.py:106] <xarray.Dataset>
+Dimensions:  (time: 4880, x: 64, y: 64, sample: 32)
+Coordinates:
+  * time     (time) float64 0.0 0.007012 0.01402 0.02104 ... 34.2 34.21 34.21
+  * x        (x) float32 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float32 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 ... 23 24 25 26 27 28 29 30 31
+Data variables:
+    u        (sample, time, x, y) float32 ...
+    v        (sample, time, x, y) float32 ...
+Attributes: (12/16)
+    seed:                          0
+    tracing_max_duration_in_msec:  100.0
+    ndim:                          2
+    domain_size_multiple:          1
+    warmup_grid_size:              2048
+    simulation_grid_size:          2048
+    ...                            ...
+    maximum_velocity:              7.0
+    init_peak_wavenumber:          4.0
+    init_cfl_safety_factor:        0.5
+    physics_config_str:            \n# Macros:\n# ===========================...
+    full_config_str:               \n# Macros:\n# ===========================...
+    stable_time_step:              0.007012483601762931
+I1216 14:22:18.590696 139628846601088 dataset.py:108] seed: 0
+I1216 14:22:18.590730 139628846601088 dataset.py:108] tracing_max_duration_in_msec: 100.0
+I1216 14:22:18.590759 139628846601088 dataset.py:108] ndim: 2
+I1216 14:22:18.590784 139628846601088 dataset.py:108] domain_size_multiple: 1
+I1216 14:22:18.590811 139628846601088 dataset.py:108] warmup_grid_size: 2048
+I1216 14:22:18.590836 139628846601088 dataset.py:108] simulation_grid_size: 2048
+I1216 14:22:18.590860 139628846601088 dataset.py:108] save_grid_size: 64
+I1216 14:22:18.590893 139628846601088 dataset.py:108] warmup_time: 40.0
+I1216 14:22:18.590919 139628846601088 dataset.py:108] simulation_time: 30.0
+I1216 14:22:18.590943 139628846601088 dataset.py:108] time_subsample_factor: 1
+I1216 14:22:18.590968 139628846601088 dataset.py:108] maximum_velocity: 7.0
+I1216 14:22:18.590994 139628846601088 dataset.py:108] init_peak_wavenumber: 4.0
+I1216 14:22:18.591022 139628846601088 dataset.py:108] init_cfl_safety_factor: 0.5
+I1216 14:22:18.591048 139628846601088 dataset.py:108] physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+I1216 14:22:18.591075 139628846601088 dataset.py:108] full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+I1216 14:22:18.591105 139628846601088 dataset.py:108] stable_time_step: 0.007012483601762931
+I1216 14:22:19.351844 139628846601088 train.py:143] Stable time step: 0.0070124836
+I1216 14:22:20.065300 139628846601088 my_interpolations.py:122] inputs shape: (64, 64, 2)
+I1216 14:22:25.024345 139628846601088 my_interpolations.py:125] (64, 64, 2)
+I1216 14:22:25.024462 139628846601088 my_interpolations.py:126] [16, 16, 16, 16, 16, 16, 16, 16]
+I1216 14:22:25.767464 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.087122 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.089941 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.092742 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.556750 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.559773 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.562561 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:26.565376 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.213753 139628846601088 my_interpolations.py:122] inputs shape: (64, 64, 2)
+I1216 14:22:27.415089 139628846601088 my_interpolations.py:125] (64, 64, 2)
+I1216 14:22:27.415183 139628846601088 my_interpolations.py:126] [16, 16, 16, 16, 16, 16, 16, 16]
+I1216 14:22:27.421713 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.442524 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.463590 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.484240 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.511737 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.532267 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.553103 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:27.573611 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:29.915874 139628846601088 train.py:493] Loading from /global/cfs/cdirs/m3898/zhiqings/cfd/models/learned_64_simple
+I1216 14:22:29.917811 139628846601088 checkpoints.py:242] Found no checkpoint at /global/cfs/cdirs/m3898/zhiqings/cfd/models/learned_64_simple
+I1216 14:22:29.938369 139628846601088 train.py:405] [Timing] train start.
+I1216 14:22:29.938482 139628846601088 dataset.py:284] [GpuDevice(id=0, process_index=0), GpuDevice(id=1, process_index=0), GpuDevice(id=2, process_index=0), GpuDevice(id=3, process_index=0)]
+/global/cfs/cdirs/m3898/zhiqings/anaconda3/envs/cfd/lib/python3.8/site-packages/jax/_src/lib/xla_bridge.py:412: UserWarning: jax.host_id has been renamed to jax.process_index. This alias will eventually be removed; please update your code.
+  warnings.warn(
+/global/cfs/cdirs/m3898/zhiqings/anaconda3/envs/cfd/lib/python3.8/site-packages/jax/_src/lib/xla_bridge.py:425: UserWarning: jax.host_count has been renamed to jax.process_count. This alias will eventually be removed; please update your code.
+  warnings.warn(
+I1216 14:22:29.960868 139628846601088 dataset.py:139] Start: 0, End:150560
+I1216 14:22:34.843390 139628846601088 train.py:143] Stable time step: 0.0070124836
+I1216 14:22:34.865531 139628846601088 my_interpolations.py:122] inputs shape: (64, 64, 2)
+I1216 14:22:35.093767 139628846601088 my_interpolations.py:125] (64, 64, 2)
+I1216 14:22:35.093881 139628846601088 my_interpolations.py:126] [16, 16, 16, 16, 16, 16, 16, 16]
+I1216 14:22:35.101317 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.126815 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.150205 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.173164 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.204066 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.227251 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.251039 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:35.274352 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:22:38.248052 139628846601088 train.py:183] warmup_steps: 0
+I1216 14:22:38.248155 139628846601088 train.py:184] training_steps: 1882
+I1216 14:22:57.913980 139628846601088 train.py:577] [Train 10/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0077463057823479176}
+I1216 14:23:03.961861 139628846601088 train.py:577] [Train 20/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.005701407790184021}
+I1216 14:23:10.007355 139628846601088 train.py:577] [Train 30/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00647010887041688}
+I1216 14:23:16.070019 139628846601088 train.py:577] [Train 40/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.004751413129270077}
+I1216 14:23:22.116048 139628846601088 train.py:577] [Train 50/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0026976135559380054}
+I1216 14:23:28.161703 139628846601088 train.py:577] [Train 60/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.002194405533373356}
+I1216 14:23:34.221859 139628846601088 train.py:577] [Train 70/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.001541132340207696}
+I1216 14:23:40.269512 139628846601088 train.py:577] [Train 80/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00155367492698133}
+I1216 14:23:46.317286 139628846601088 train.py:577] [Train 90/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0015011472860351205}
+I1216 14:23:52.363905 139628846601088 train.py:577] [Train 100/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0017401620279997587}
+I1216 14:23:58.410708 139628846601088 train.py:577] [Train 110/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0013682988937944174}
+I1216 14:24:04.454993 139628846601088 train.py:577] [Train 120/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0013578267535194755}
+I1216 14:24:10.499977 139628846601088 train.py:577] [Train 130/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0012666942784562707}
+I1216 14:24:16.545343 139628846601088 train.py:577] [Train 140/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0012879394926130772}
+I1216 14:24:22.591591 139628846601088 train.py:577] [Train 150/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0010169995948672295}
+I1216 14:24:28.637603 139628846601088 train.py:577] [Train 160/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0015029901405796409}
+I1216 14:24:34.682860 139628846601088 train.py:577] [Train 170/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0009572745184414089}
+I1216 14:24:40.728707 139628846601088 train.py:577] [Train 180/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0010993327014148235}
+I1216 14:24:46.773870 139628846601088 train.py:577] [Train 190/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0010014185681939125}
+I1216 14:24:52.819564 139628846601088 train.py:577] [Train 200/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0010388870723545551}
+I1216 14:24:58.866147 139628846601088 train.py:577] [Train 210/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0010384581983089447}
+I1216 14:25:04.911323 139628846601088 train.py:577] [Train 220/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007924100500531495}
+I1216 14:25:10.956845 139628846601088 train.py:577] [Train 230/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0010403954656794667}
+I1216 14:25:17.001165 139628846601088 train.py:577] [Train 240/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007808426744304597}
+I1216 14:25:23.045704 139628846601088 train.py:577] [Train 250/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007351534441113472}
+I1216 14:25:29.090487 139628846601088 train.py:577] [Train 260/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0008190436055883765}
+I1216 14:25:35.134461 139628846601088 train.py:577] [Train 270/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007720833527855575}
+I1216 14:25:41.179164 139628846601088 train.py:577] [Train 280/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0006998906610533595}
+I1216 14:25:47.224024 139628846601088 train.py:577] [Train 290/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007031925488263369}
+I1216 14:25:53.268010 139628846601088 train.py:577] [Train 300/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0006936418358236551}
+I1216 14:25:59.314631 139628846601088 train.py:577] [Train 310/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007094651227816939}
+I1216 14:26:05.363208 139628846601088 train.py:577] [Train 320/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0007050816784612834}
+I1216 14:26:11.409196 139628846601088 train.py:577] [Train 330/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005886776489205658}
+I1216 14:26:17.453935 139628846601088 train.py:577] [Train 340/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0006789539474993944}
+I1216 14:26:23.500070 139628846601088 train.py:577] [Train 350/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0006343919085338712}
+I1216 14:26:29.545014 139628846601088 train.py:577] [Train 360/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005700986366719007}
+I1216 14:26:35.590339 139628846601088 train.py:577] [Train 370/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005215364508330822}
+I1216 14:26:41.632870 139628846601088 train.py:577] [Train 380/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005927789025008678}
+I1216 14:26:47.677372 139628846601088 train.py:577] [Train 390/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005492756026796997}
+I1216 14:26:53.722090 139628846601088 train.py:577] [Train 400/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0006464518955908716}
+I1216 14:26:59.767787 139628846601088 train.py:577] [Train 410/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005505097797140479}
+I1216 14:27:05.821219 139628846601088 train.py:577] [Train 420/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000573983765207231}
+I1216 14:27:11.867033 139628846601088 train.py:577] [Train 430/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005292241694405675}
+I1216 14:27:17.911506 139628846601088 train.py:577] [Train 440/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005727367824874818}
+I1216 14:27:23.960371 139628846601088 train.py:577] [Train 450/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000549471820704639}
+I1216 14:27:30.019492 139628846601088 train.py:577] [Train 460/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004744078032672405}
+I1216 14:27:36.077933 139628846601088 train.py:577] [Train 470/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00043866661144420505}
+I1216 14:27:42.137295 139628846601088 train.py:577] [Train 480/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00047325133346021175}
+I1216 14:27:48.193972 139628846601088 train.py:577] [Train 490/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005236488068476319}
+I1216 14:27:54.248400 139628846601088 train.py:577] [Train 500/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000433215667726472}
+I1216 14:28:00.305129 139628846601088 train.py:577] [Train 510/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005235259886831045}
+I1216 14:28:06.363410 139628846601088 train.py:577] [Train 520/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005220240564085543}
+I1216 14:28:12.422206 139628846601088 train.py:577] [Train 530/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004049308190587908}
+I1216 14:28:18.477404 139628846601088 train.py:577] [Train 540/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004769183578900993}
+I1216 14:28:24.526797 139628846601088 train.py:577] [Train 550/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004150845343247056}
+I1216 14:28:30.574206 139628846601088 train.py:577] [Train 560/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004420660843607038}
+I1216 14:28:36.624547 139628846601088 train.py:577] [Train 570/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00045573918032459915}
+I1216 14:28:42.672717 139628846601088 train.py:577] [Train 580/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00045460049295797944}
+I1216 14:28:48.721752 139628846601088 train.py:577] [Train 590/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005005383864045143}
+I1216 14:28:54.775839 139628846601088 train.py:577] [Train 600/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005441138637252152}
+I1216 14:29:00.821044 139628846601088 train.py:577] [Train 610/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00048022932605817914}
+I1216 14:29:06.865468 139628846601088 train.py:577] [Train 620/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005352856824174523}
+I1216 14:29:12.914806 139628846601088 train.py:577] [Train 630/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004258908156771213}
+I1216 14:29:18.972870 139628846601088 train.py:577] [Train 640/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004627294547390193}
+I1216 14:29:25.019476 139628846601088 train.py:577] [Train 650/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005319424089975655}
+I1216 14:29:31.067484 139628846601088 train.py:577] [Train 660/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004104303370695561}
+I1216 14:29:37.117811 139628846601088 train.py:577] [Train 670/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00038497551577165723}
+I1216 14:29:43.166490 139628846601088 train.py:577] [Train 680/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000426354818046093}
+I1216 14:29:49.221914 139628846601088 train.py:577] [Train 690/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0005436677020043135}
+I1216 14:29:55.273013 139628846601088 train.py:577] [Train 700/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004136887437198311}
+I1216 14:30:01.326049 139628846601088 train.py:577] [Train 710/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004106395645067096}
+I1216 14:30:07.370596 139628846601088 train.py:577] [Train 720/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00041776165016926825}
+I1216 14:30:13.416522 139628846601088 train.py:577] [Train 730/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00040610937867313623}
+I1216 14:30:19.460227 139628846601088 train.py:577] [Train 740/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00038221816066652536}
+I1216 14:30:25.505642 139628846601088 train.py:577] [Train 750/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00047432573046535254}
+I1216 14:30:31.548446 139628846601088 train.py:577] [Train 760/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004352299147285521}
+I1216 14:30:37.597773 139628846601088 train.py:577] [Train 770/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003847662592306733}
+I1216 14:30:43.654206 139628846601088 train.py:577] [Train 780/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004415216390043497}
+I1216 14:30:49.707161 139628846601088 train.py:577] [Train 790/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00045970233622938395}
+I1216 14:30:55.762611 139628846601088 train.py:577] [Train 800/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00037791248178109527}
+I1216 14:31:01.816573 139628846601088 train.py:577] [Train 810/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003723946865648031}
+I1216 14:31:07.872623 139628846601088 train.py:577] [Train 820/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00039197911974042654}
+I1216 14:31:13.925898 139628846601088 train.py:577] [Train 830/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004359615850262344}
+I1216 14:31:19.980325 139628846601088 train.py:577] [Train 840/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004630748589988798}
+I1216 14:31:26.037867 139628846601088 train.py:577] [Train 850/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000346075976267457}
+I1216 14:31:32.094345 139628846601088 train.py:577] [Train 860/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00046636833576485515}
+I1216 14:31:38.152070 139628846601088 train.py:577] [Train 870/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00042863551061600447}
+I1216 14:31:44.207960 139628846601088 train.py:577] [Train 880/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003828626067843288}
+I1216 14:31:50.265991 139628846601088 train.py:577] [Train 890/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003448653151281178}
+I1216 14:31:56.321940 139628846601088 train.py:577] [Train 900/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00038752600084990263}
+I1216 14:32:02.375988 139628846601088 train.py:577] [Train 910/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003896048292517662}
+I1216 14:32:08.420208 139628846601088 train.py:577] [Train 920/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00039730576099827886}
+I1216 14:32:14.466151 139628846601088 train.py:577] [Train 930/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004069063870701939}
+I1216 14:32:20.521383 139628846601088 train.py:577] [Train 940/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00041655002860352397}
+I1216 14:32:26.576953 139628846601088 train.py:577] [Train 950/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000383144011721015}
+I1216 14:32:32.634624 139628846601088 train.py:577] [Train 960/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00036192144034430385}
+I1216 14:32:38.691396 139628846601088 train.py:577] [Train 970/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003570242552086711}
+I1216 14:32:44.748849 139628846601088 train.py:577] [Train 980/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000407563173212111}
+I1216 14:32:50.806181 139628846601088 train.py:577] [Train 990/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004093023599125445}
+I1216 14:32:56.861071 139628846601088 train.py:577] [Train 1000/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003707101568579674}
+/global/cfs/cdirs/m3898/zhiqings/anaconda3/envs/cfd/lib/python3.8/site-packages/jax/_src/lib/xla_bridge.py:412: UserWarning: jax.host_id has been renamed to jax.process_index. This alias will eventually be removed; please update your code.
+  warnings.warn(
+I1216 14:32:56.861886 139628846601088 checkpoints.py:120] Saving checkpoint at step: 1000
+I1216 14:32:57.181881 139628846601088 checkpoints.py:149] Saved checkpoint at /global/cfs/cdirs/m3898/zhiqings/cfd/models/learned_64_simple/checkpoint_1000
+I1216 14:33:03.239492 139628846601088 train.py:577] [Train 1010/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00040089889080263674}
+I1216 14:33:09.290529 139628846601088 train.py:577] [Train 1020/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00037899627932347357}
+I1216 14:33:15.346126 139628846601088 train.py:577] [Train 1030/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00035675964318215847}
+I1216 14:33:21.402557 139628846601088 train.py:577] [Train 1040/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004009988042525947}
+I1216 14:33:27.460572 139628846601088 train.py:577] [Train 1050/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00031223008409142494}
+I1216 14:33:33.513513 139628846601088 train.py:577] [Train 1060/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00035674317041411996}
+I1216 14:33:39.570001 139628846601088 train.py:577] [Train 1070/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003747659211512655}
+I1216 14:33:45.619883 139628846601088 train.py:577] [Train 1080/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003700681554619223}
+I1216 14:33:51.671987 139628846601088 train.py:577] [Train 1090/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033654386061243713}
+I1216 14:33:57.723387 139628846601088 train.py:577] [Train 1100/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0004032387805636972}
+I1216 14:34:03.779954 139628846601088 train.py:577] [Train 1110/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00036299688508734107}
+I1216 14:34:09.836944 139628846601088 train.py:577] [Train 1120/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00034497323213145137}
+I1216 14:34:15.891943 139628846601088 train.py:577] [Train 1130/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003174691810272634}
+I1216 14:34:21.946242 139628846601088 train.py:577] [Train 1140/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032383925281465054}
+I1216 14:34:28.001119 139628846601088 train.py:577] [Train 1150/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033317337511107326}
+I1216 14:34:34.052868 139628846601088 train.py:577] [Train 1160/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00035034259781241417}
+I1216 14:34:40.109775 139628846601088 train.py:577] [Train 1170/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003958674496971071}
+I1216 14:34:46.164986 139628846601088 train.py:577] [Train 1180/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003763529530260712}
+I1216 14:34:52.212094 139628846601088 train.py:577] [Train 1190/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032742874464020133}
+I1216 14:34:58.263381 139628846601088 train.py:577] [Train 1200/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00038105706335045397}
+I1216 14:35:04.312431 139628846601088 train.py:577] [Train 1210/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00039025943260639906}
+I1216 14:35:10.367100 139628846601088 train.py:577] [Train 1220/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003596915630623698}
+I1216 14:35:16.414613 139628846601088 train.py:577] [Train 1230/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00036513025406748056}
+I1216 14:35:22.463652 139628846601088 train.py:577] [Train 1240/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003561420307960361}
+I1216 14:35:28.511729 139628846601088 train.py:577] [Train 1250/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003453941608313471}
+I1216 14:35:34.558654 139628846601088 train.py:577] [Train 1260/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003907126374542713}
+I1216 14:35:40.612408 139628846601088 train.py:577] [Train 1270/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003260084195062518}
+I1216 14:35:46.667623 139628846601088 train.py:577] [Train 1280/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003585024387575686}
+I1216 14:35:52.719074 139628846601088 train.py:577] [Train 1290/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003047423670068383}
+I1216 14:35:58.775759 139628846601088 train.py:577] [Train 1300/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003397985128685832}
+I1216 14:36:04.831925 139628846601088 train.py:577] [Train 1310/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00034590368159115314}
+I1216 14:36:10.877882 139628846601088 train.py:577] [Train 1320/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032150460174307227}
+I1216 14:36:16.922071 139628846601088 train.py:577] [Train 1330/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003913327818736434}
+I1216 14:36:22.967401 139628846601088 train.py:577] [Train 1340/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003142734640277922}
+I1216 14:36:29.011868 139628846601088 train.py:577] [Train 1350/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033163896296173334}
+I1216 14:36:35.066525 139628846601088 train.py:577] [Train 1360/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003310461179353297}
+I1216 14:36:41.123743 139628846601088 train.py:577] [Train 1370/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003445001784712076}
+I1216 14:36:47.178117 139628846601088 train.py:577] [Train 1380/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033842044649645686}
+I1216 14:36:53.235735 139628846601088 train.py:577] [Train 1390/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003130583500023931}
+I1216 14:36:59.292521 139628846601088 train.py:577] [Train 1400/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00030567002249881625}
+I1216 14:37:05.349471 139628846601088 train.py:577] [Train 1410/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003001486184075475}
+I1216 14:37:11.399641 139628846601088 train.py:577] [Train 1420/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00035659249988384545}
+I1216 14:37:17.446160 139628846601088 train.py:577] [Train 1430/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003553983406163752}
+I1216 14:37:23.501426 139628846601088 train.py:577] [Train 1440/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032183402800001204}
+I1216 14:37:29.553766 139628846601088 train.py:577] [Train 1450/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00029625254683196545}
+I1216 14:37:35.611760 139628846601088 train.py:577] [Train 1460/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00034052232513204217}
+I1216 14:37:41.669272 139628846601088 train.py:577] [Train 1470/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003488935180939734}
+I1216 14:37:47.723479 139628846601088 train.py:577] [Train 1480/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032995615038089454}
+I1216 14:37:53.776533 139628846601088 train.py:577] [Train 1490/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0002956569951493293}
+I1216 14:37:59.832980 139628846601088 train.py:577] [Train 1500/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003288919688202441}
+I1216 14:38:05.888440 139628846601088 train.py:577] [Train 1510/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003325746802147478}
+I1216 14:38:11.940956 139628846601088 train.py:577] [Train 1520/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00031531433342024684}
+I1216 14:38:17.987522 139628846601088 train.py:577] [Train 1530/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032994188950397074}
+I1216 14:38:24.031449 139628846601088 train.py:577] [Train 1540/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003221810911782086}
+I1216 14:38:30.077579 139628846601088 train.py:577] [Train 1550/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033612691913731396}
+I1216 14:38:36.123536 139628846601088 train.py:577] [Train 1560/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0002942275023087859}
+I1216 14:38:42.166634 139628846601088 train.py:577] [Train 1570/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003295338829047978}
+I1216 14:38:48.210019 139628846601088 train.py:577] [Train 1580/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00030756311025470495}
+I1216 14:38:54.256097 139628846601088 train.py:577] [Train 1590/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033072620863094926}
+I1216 14:39:00.301977 139628846601088 train.py:577] [Train 1600/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00034642487298697233}
+I1216 14:39:06.347245 139628846601088 train.py:577] [Train 1610/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003517105942592025}
+I1216 14:39:12.394048 139628846601088 train.py:577] [Train 1620/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00034370244247838855}
+I1216 14:39:18.444233 139628846601088 train.py:577] [Train 1630/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00031728664180263877}
+I1216 14:39:24.499130 139628846601088 train.py:577] [Train 1640/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000347080291248858}
+I1216 14:39:30.556887 139628846601088 train.py:577] [Train 1650/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003585593949537724}
+I1216 14:39:36.613531 139628846601088 train.py:577] [Train 1660/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00028164422838017344}
+I1216 14:39:42.666006 139628846601088 train.py:577] [Train 1670/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003024651377927512}
+I1216 14:39:48.713719 139628846601088 train.py:577] [Train 1680/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003645391552709043}
+I1216 14:39:54.762055 139628846601088 train.py:577] [Train 1690/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00036267226096242666}
+I1216 14:40:00.807363 139628846601088 train.py:577] [Train 1700/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003167339018546045}
+I1216 14:40:06.856189 139628846601088 train.py:577] [Train 1710/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00034996133763343096}
+I1216 14:40:12.911405 139628846601088 train.py:577] [Train 1720/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.000310961389914155}
+I1216 14:40:18.963705 139628846601088 train.py:577] [Train 1730/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003172019496560097}
+I1216 14:40:25.017899 139628846601088 train.py:577] [Train 1740/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00040823500603437424}
+I1216 14:40:31.066566 139628846601088 train.py:577] [Train 1750/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003443859168328345}
+I1216 14:40:37.111166 139628846601088 train.py:577] [Train 1760/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003274131449870765}
+I1216 14:40:43.161298 139628846601088 train.py:577] [Train 1770/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003377466055098921}
+I1216 14:40:49.212133 139628846601088 train.py:577] [Train 1780/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003770081384573132}
+I1216 14:40:55.260151 139628846601088 train.py:577] [Train 1790/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00033803601399995387}
+I1216 14:41:01.316963 139628846601088 train.py:577] [Train 1800/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00026020954828709364}
+I1216 14:41:07.374392 139628846601088 train.py:577] [Train 1810/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003392616636119783}
+I1216 14:41:13.425376 139628846601088 train.py:577] [Train 1820/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003287676954641938}
+I1216 14:41:19.479133 139628846601088 train.py:577] [Train 1830/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00036013152566738427}
+I1216 14:41:25.536834 139628846601088 train.py:577] [Train 1840/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00032418890623375773}
+I1216 14:41:31.597795 139628846601088 train.py:577] [Train 1850/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00035850430140271783}
+I1216 14:41:37.656672 139628846601088 train.py:577] [Train 1860/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00031938572647050023}
+I1216 14:41:43.714825 139628846601088 train.py:577] [Train 1870/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.00031399482395499945}
+I1216 14:41:49.771342 139628846601088 train.py:577] [Train 1880/1882] {'grads_finite': 1.0, 'loss_scale': 1.0, 'train_loss': 0.0003428758936934173}
+I1216 14:41:50.371910 139628846601088 train.py:409] [Timing] train finished (Took 1160.43s).
+I1216 14:41:50.372579 139628846601088 checkpoints.py:120] Saving checkpoint at step: 1881
+I1216 14:42:23.981342 139628846601088 checkpoints.py:149] Saved checkpoint at /global/cfs/cdirs/m3898/zhiqings/cfd/models/learned_64_simple/checkpoint_1881
+I1216 14:42:23.981509 139628846601088 train.py:405] [Timing] final eval start.
+I1216 14:42:24.070693 139628846601088 dataset.py:106] <xarray.Dataset>
+Dimensions:  (time: 3477, x: 64, y: 64, sample: 16)
+Coordinates:
+  * time     (time) float64 0.0 0.07012 0.1402 0.2104 ... 243.6 243.7 243.8
+  * x        (x) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * y        (y) float64 0.04909 0.1473 0.2454 0.3436 ... 5.94 6.038 6.136 6.234
+  * sample   (sample) int32 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Data variables:
+    u        (sample, time, x, y) float32 ...
+    v        (sample, time, x, y) float32 ...
+Attributes: (12/16)
+    domain_size_multiple:          1
+    full_config_str:               \n# Macros:\n# ===========================...
+    init_cfl_safety_factor:        0.5
+    init_peak_wavenumber:          4.0
+    maximum_velocity:              7.0
+    ndim:                          2
+    ...                            ...
+    simulation_time:               240.0
+    stable_time_step:              0.007012483601762931
+    time_subsample_factor:         1
+    tracing_max_duration_in_msec:  100.0
+    warmup_grid_size:              2048
+    warmup_time:                   40.0
+I1216 14:42:24.070761 139628846601088 dataset.py:108] domain_size_multiple: 1
+I1216 14:42:24.070800 139628846601088 dataset.py:108] full_config_str: 
+# Macros:
+# ==============================================================================
+C_INTERPOLATION_MODULE = @interpolations.transformed
+CONVECTION_MODULE = @advections.self_advection
+DENSITY = 1.0
+DIFFUSION_MODULE = @diffusions.solve_fast_diag
+FORCING_MODULE = @forcings.kolmogorov_forcing
+NS_MODULE = @equations.modular_navier_stokes_model
+PRESSURE_MODULE = @pressures.fast_diagonalization
+U_INTERPOLATION_MODULE = @interpolations.linear
+VISCOSITY = 0.0003
+
+# Parameters for get_model_cls:
+# ==============================================================================
+get_model_cls.model_cls = @ModularStepModel
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for implicit_diffusion_navier_stokes:
+# ==============================================================================
+implicit_diffusion_navier_stokes.diffusion_module = %DIFFUSION_MODULE
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for modular_advection:
+# ==============================================================================
+modular_advection.c_interpolation_module = %C_INTERPOLATION_MODULE
+modular_advection.u_interpolation_module = %U_INTERPOLATION_MODULE
+
+# Parameters for modular_navier_stokes_model:
+# ==============================================================================
+modular_navier_stokes_model.convection_module = %CONVECTION_MODULE
+modular_navier_stokes_model.equation_solver = \
+    @equations.implicit_diffusion_navier_stokes
+modular_navier_stokes_model.pressure_module = %PRESSURE_MODULE
+
+# Parameters for ModularStepModel:
+# ==============================================================================
+ModularStepModel.advance_module = %NS_MODULE
+ModularStepModel.decoder_module = @decoders.aligned_array_decoder
+ModularStepModel.encoder_module = @encoders.aligned_array_encoder
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+
+# Parameters for self_advection:
+# ==============================================================================
+self_advection.advection_module = @advections.modular_advection
+
+# Parameters for transformed:
+# ==============================================================================
+transformed.base_interpolation_module = @interpolations.lax_wendroff
+transformed.transformation = @interpolations.tvd_limiter_transformation
+I1216 14:42:24.070840 139628846601088 dataset.py:108] init_cfl_safety_factor: 0.5
+I1216 14:42:24.070870 139628846601088 dataset.py:108] init_peak_wavenumber: 4.0
+I1216 14:42:24.070898 139628846601088 dataset.py:108] maximum_velocity: 7.0
+I1216 14:42:24.070925 139628846601088 dataset.py:108] ndim: 2
+I1216 14:42:24.070953 139628846601088 dataset.py:108] physics_config_str: 
+# Macros:
+# ==============================================================================
+DENSITY = 1.0
+FORCING_MODULE = @forcings.kolmogorov_forcing
+
+# Parameters for get_physics_specs:
+# ==============================================================================
+get_physics_specs.physics_specs_cls = @NavierStokesPhysicsSpecs
+
+# Parameters for kolmogorov_forcing:
+# ==============================================================================
+kolmogorov_forcing.linear_coefficient = -0.1
+kolmogorov_forcing.scale = 1.0
+kolmogorov_forcing.swap_xy = False
+kolmogorov_forcing.wavenumber = 4
+
+# Parameters for NavierStokesPhysicsSpecs:
+# ==============================================================================
+NavierStokesPhysicsSpecs.density = %DENSITY
+NavierStokesPhysicsSpecs.forcing_module = %FORCING_MODULE
+NavierStokesPhysicsSpecs.viscosity = 0.001
+I1216 14:42:24.070985 139628846601088 dataset.py:108] save_grid_size: 64
+I1216 14:42:24.071012 139628846601088 dataset.py:108] seed: 2
+I1216 14:42:24.071038 139628846601088 dataset.py:108] simulation_grid_size: 2048
+I1216 14:42:24.071065 139628846601088 dataset.py:108] simulation_time: 240.0
+I1216 14:42:24.071092 139628846601088 dataset.py:108] stable_time_step: 0.007012483601762931
+I1216 14:42:24.071119 139628846601088 dataset.py:108] time_subsample_factor: 1
+I1216 14:42:24.071146 139628846601088 dataset.py:108] tracing_max_duration_in_msec: 100.0
+I1216 14:42:24.071172 139628846601088 dataset.py:108] warmup_grid_size: 2048
+I1216 14:42:24.071198 139628846601088 dataset.py:108] warmup_time: 40.0
+/global/cfs/cdirs/m3898/zhiqings/anaconda3/envs/cfd/lib/python3.8/site-packages/jax/_src/lib/xla_bridge.py:425: UserWarning: jax.host_count has been renamed to jax.process_count. This alias will eventually be removed; please update your code.
+  warnings.warn(
+I1216 14:42:24.078848 139628846601088 dataset.py:139] Start: 0, End:55136
+I1216 14:42:29.847401 139628846601088 train.py:143] Stable time step: 0.0070124836
+I1216 14:42:29.867698 139628846601088 my_interpolations.py:122] inputs shape: (64, 64, 2)
+I1216 14:42:30.116962 139628846601088 my_interpolations.py:125] (64, 64, 2)
+I1216 14:42:30.117169 139628846601088 my_interpolations.py:126] [16, 16, 16, 16, 16, 16, 16, 16]
+I1216 14:42:30.126393 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.152289 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.179322 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.204296 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.237175 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.261376 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.285901 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:30.309514 139628846601088 my_interpolations.py:213] (64, 64, 16)
+I1216 14:42:44.291301 139628846601088 train.py:398] Evaluated 10/287 with L2 loss 0.00036223349161446095
+I1216 14:42:55.114416 139628846601088 train.py:398] Evaluated 20/287 with L2 loss 0.000355850497726351
+I1216 14:43:05.946261 139628846601088 train.py:398] Evaluated 30/287 with L2 loss 0.0003484144399408251
+I1216 14:43:16.778595 139628846601088 train.py:398] Evaluated 40/287 with L2 loss 0.00034614981268532574
+I1216 14:43:27.614814 139628846601088 train.py:398] Evaluated 50/287 with L2 loss 0.00034341512946411967
+I1216 14:43:38.447669 139628846601088 train.py:398] Evaluated 60/287 with L2 loss 0.00034370337380096316
+I1216 14:43:49.284298 139628846601088 train.py:398] Evaluated 70/287 with L2 loss 0.0003450179938226938
+I1216 14:44:00.119107 139628846601088 train.py:398] Evaluated 80/287 with L2 loss 0.00034421533928252757
+I1216 14:44:10.958899 139628846601088 train.py:398] Evaluated 90/287 with L2 loss 0.00034418105497024953
+I1216 14:44:21.807241 139628846601088 train.py:398] Evaluated 100/287 with L2 loss 0.0003459234721958637
+I1216 14:44:32.655086 139628846601088 train.py:398] Evaluated 110/287 with L2 loss 0.00034718189272098243
+I1216 14:44:43.502332 139628846601088 train.py:398] Evaluated 120/287 with L2 loss 0.0003475944686215371
+I1216 14:44:54.358168 139628846601088 train.py:398] Evaluated 130/287 with L2 loss 0.0003477005520835519
+I1216 14:45:05.205063 139628846601088 train.py:398] Evaluated 140/287 with L2 loss 0.00034651803434826434
+I1216 14:45:16.054632 139628846601088 train.py:398] Evaluated 150/287 with L2 loss 0.0003477803838904947
+I1216 14:45:26.901337 139628846601088 train.py:398] Evaluated 160/287 with L2 loss 0.0003490883973427117
+I1216 14:45:37.753719 139628846601088 train.py:398] Evaluated 170/287 with L2 loss 0.0003483147011138499
+I1216 14:45:48.601107 139628846601088 train.py:398] Evaluated 180/287 with L2 loss 0.000348293426213786
+I1216 14:45:59.456525 139628846601088 train.py:398] Evaluated 190/287 with L2 loss 0.00035021521034650505
+I1216 14:46:10.314978 139628846601088 train.py:398] Evaluated 200/287 with L2 loss 0.00034804968163371086
+I1216 14:46:21.167682 139628846601088 train.py:398] Evaluated 210/287 with L2 loss 0.00034785442403517663
+I1216 14:46:32.017973 139628846601088 train.py:398] Evaluated 220/287 with L2 loss 0.0003481798048596829
+I1216 14:46:42.864287 139628846601088 train.py:398] Evaluated 230/287 with L2 loss 0.0003486180503387004
+I1216 14:46:53.707812 139628846601088 train.py:398] Evaluated 240/287 with L2 loss 0.0003497675061225891
+I1216 14:47:04.552923 139628846601088 train.py:398] Evaluated 250/287 with L2 loss 0.0003494581033010036
+I1216 14:47:15.394930 139628846601088 train.py:398] Evaluated 260/287 with L2 loss 0.00034949250402860343
+I1216 14:47:26.234952 139628846601088 train.py:398] Evaluated 270/287 with L2 loss 0.0003486183995846659
+I1216 14:47:37.078191 139628846601088 train.py:398] Evaluated 280/287 with L2 loss 0.00034842509194277227
+I1216 14:47:46.163375 139628846601088 train.py:409] [Timing] final eval finished (Took 322.18s).
+I1216 14:47:46.163496 139628846601088 train.py:597] [Eval FINAL]: {'rmse': DeviceArray(0.0186973, dtype=float32)}
