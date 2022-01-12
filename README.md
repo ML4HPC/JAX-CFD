@@ -8,8 +8,9 @@ The trained models are in `/global/cfs/cdirs/m3898/zhiqings/cfd/models`
 
 # Installation
 ```
-conda env create -f jax.yml
-conda activate jax
+conda env create -f cfd.yml
+conda activate cfd
+pip install git+https://github.com/google/jax-cfd.git
 ```
 
 # Run
